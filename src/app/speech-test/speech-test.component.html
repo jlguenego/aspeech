@@ -1,6 +1,9 @@
 <div class="command">
-  <button (click)="toggleContinuous()">continuous speech</button>
-  <button (click)="toggleInterimResults()">interim result</button>
+  <label><input type="checkbox" (change)="toggleInterimResults()" checked><span>Interim Result</span></label>
+  <label><input type="checkbox" (change)="toggleContinuous()" checked><span>Continuous Speech</span></label>
+</div>
+<div class="command">
+
   <select [formControl]="dialect">
     <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
   </select>

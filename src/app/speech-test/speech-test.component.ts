@@ -39,6 +39,7 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.onstart = () => {
       console.log('onstart');
       this.isListening = true;
+      this.app.tick();
     };
     this.recognition.onresult = (event: ISpeechEvent) => {
       console.log('on result', event);
@@ -57,9 +58,10 @@ export class SpeechTestComponent implements OnInit {
       }
 
     };
-    this.recognition.onerror =  (event) => {
+    this.recognition.onerror = (event) => {
       console.error('error', event);
-     }
+      this.app.tick();
+    }
     this.recognition.onend = () => {
       console.log('onend');
       this.isListening = false;
@@ -68,6 +70,7 @@ export class SpeechTestComponent implements OnInit {
       }
       this.isStarted = false;
       this.isListening = false;
+      this.app.tick();
     };
   }
 
