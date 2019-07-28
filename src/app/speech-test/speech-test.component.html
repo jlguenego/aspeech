@@ -1,11 +1,13 @@
-<button (click)="toggleContinuous()">continuous speech</button>
-<button disabled (click)="toggleInterimResults()">interim result</button>
-<select [formControl]="dialect">
-  <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
-</select>
-<button class="microphone" (click)="toggleMicrophone()">
-  <img src="../../assets/mic.svg" alt="Microphone">
-</button>
+<div class="command">
+  <button (click)="toggleContinuous()">continuous speech</button>
+  <button disabled (click)="toggleInterimResults()">interim result</button>
+  <select [formControl]="dialect">
+    <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
+  </select>
+  <button class="microphone" (click)="toggleMicrophone()">
+    <i class="material-icons">mic</i>
+  </button>
+</div>
 <div class="textarea">
   <div class="interim">{{interimTranscript}}</div>
   <div class="final">{{finalTranscript}}</div>

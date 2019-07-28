@@ -1,3 +1,7 @@
+.command>* {
+  vertical-align: middle;
+}
+
 .interim {
   color: blue;
 }
@@ -5,10 +9,3 @@
 .final {
   color: black;
 }
-
-button.microphone {
-  img {
-    height: 1em;
-  }
-}
-
