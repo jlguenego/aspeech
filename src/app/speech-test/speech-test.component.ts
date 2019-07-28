@@ -61,7 +61,8 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.onerror = (event) => {
       console.error('error', event);
       this.app.tick();
-    }
+    };
+
     this.recognition.onend = () => {
       console.log('onend');
       this.isListening = false;

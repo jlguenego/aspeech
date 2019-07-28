@@ -1,4 +1,5 @@
 import { ISpeechEvent } from './ispeech-event';
+import { ISpeechRecognitionError } from './ispeech-recognition-error';
 
 export interface ISpeechRecognition {
 
@@ -28,7 +29,7 @@ export interface ISpeechRecognition {
   onend: () => void;
 
   onresult: (event: ISpeechEvent) => void;
-  onerror: (event: ISpeechEvent) => void;
+  onerror: (event: ISpeechRecognitionError) => void;
 
 
   /**
