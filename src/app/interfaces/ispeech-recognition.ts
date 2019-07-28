@@ -22,7 +22,13 @@ export interface ISpeechRecognition {
    */
   onstart: () => void;
 
+  /**
+   * function that is run by the speech framework when order to stop recognizing speech has been received.
+   */
+  onend: () => void;
+
   onresult: (event: ISpeechEvent) => void;
+  onerror: (event: ISpeechEvent) => void;
 
 
   /**

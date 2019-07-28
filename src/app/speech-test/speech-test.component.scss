@@ -1,5 +1,7 @@
-.command>* {
-  vertical-align: middle;
+.command {
+  >* {
+    vertical-align: middle;
+  }
 }
 
 .interim {
@@ -8,4 +10,15 @@
 
 .final {
   color: black;
+}
+
+.microphone>.material-icons {
+  margin: -0.15em;
+}
+
+.textarea {
+  margin-top: 0.4em;
+  border: 0.1em solid #eee;
+  width: 100%;
+  min-height: 4em;
 }

@@ -19,11 +19,14 @@ export class SpeechTestComponent implements OnInit {
     { label: 'English', code: 'en-NZ' },
   ];
 
-  recognizing = false;
   dialect = new FormControl('fr-FR');
 
   interimTranscript = '';
   finalTranscript = '';
+
+  isStarted = false;
+  isListening = false;
+  ignoreOnEnd = false;
 
   constructor(private app: ApplicationRef) { }
 
@@ -35,7 +38,7 @@ export class SpeechTestComponent implements OnInit {
 
     this.recognition.onstart = () => {
       console.log('onstart');
-      this.recognizing = true;
+      this.isListening = true;
     };
     this.recognition.onresult = (event: ISpeechEvent) => {
       console.log('on result', event);
@@ -54,8 +57,18 @@ export class SpeechTestComponent implements OnInit {
       }
 
     };
-    // recognition.onerror = function (event) { ... }
-    // recognition.onend = function () { ... }
+    this.recognition.onerror =  (event) => {
+      console.error('error', event);
+     }
+    this.recognition.onend = () => {
+      console.log('onend');
+      this.isListening = false;
+      if (this.ignoreOnEnd) {
+        return;
+      }
+      this.isStarted = false;
+      this.isListening = false;
+    };
   }
 
   toggleContinuous() {
@@ -66,25 +79,19 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.interimResults = !this.recognition.interimResults;
   }
 
-
-
   toggleMicrophone() {
-
-    if (this.recognizing) {
+    if (this.isStarted) {
       this.recognition.stop();
       console.log('stop');
+      this.isStarted = false;
       return;
     }
     console.log('start');
+    this.isStarted = true;
+    this.ignoreOnEnd = false;
     this.finalTranscript = '';
     this.recognition.lang = this.dialect.value;
     this.recognition.start();
-    // ignore_onend = false;
-
-    // start_img.src = 'mic-slash.gif';
-    // showInfo('info_allow');
-    // showButtons('none');
-    // start_timestamp = event.timeStamp;
   }
 
 }
