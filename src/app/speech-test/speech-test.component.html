@@ -1,1 +1,10 @@
-<p>speech-test works!</p>
+<button (click)="toggleContinuous()">continuous speech</button>
+<button (click)="toggleInterimResults()">interim result</button>
+<select [formControl]="dialect">
+  <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
+</select>
+<button class="microphone" (click)="start()">
+  <img src="../../assets/mic.svg" alt="Microphone">
+</button>
+<div></div>
+{{dialect.value | json}}
