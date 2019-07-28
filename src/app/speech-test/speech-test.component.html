@@ -3,7 +3,7 @@
 <select [formControl]="dialect">
   <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
 </select>
-<button class="microphone" (click)="start()">
+<button class="microphone" (click)="toggleMicrophone()">
   <img src="../../assets/mic.svg" alt="Microphone">
 </button>
 <div class="textarea">

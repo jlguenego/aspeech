@@ -66,7 +66,9 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.interimResults = !this.recognition.interimResults;
   }
 
-  start() {
+
+
+  toggleMicrophone() {
 
     if (this.recognizing) {
       this.recognition.stop();
@@ -78,8 +80,7 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.lang = this.dialect.value;
     this.recognition.start();
     // ignore_onend = false;
-    // final_span.innerHTML = '';
-    // interim_span.innerHTML = '';
+
     // start_img.src = 'mic-slash.gif';
     // showInfo('info_allow');
     // showButtons('none');
