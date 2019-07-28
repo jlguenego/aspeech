@@ -1,5 +1,5 @@
 <button (click)="toggleContinuous()">continuous speech</button>
-<button (click)="toggleInterimResults()">interim result</button>
+<button disabled (click)="toggleInterimResults()">interim result</button>
 <select [formControl]="dialect">
   <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
 </select>
