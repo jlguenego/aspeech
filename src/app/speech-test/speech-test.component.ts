@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ApplicationRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IWindow } from '../interfaces/iwindow';
 import { ISpeechRecognition } from '../interfaces/ispeech-recognition';
+import { ISpeechEvent } from '../interfaces/ispeech-event';
 
 @Component({
   selector: 'app-speech-test',
@@ -21,7 +22,10 @@ export class SpeechTestComponent implements OnInit {
   recognizing = false;
   dialect = new FormControl('fr-FR');
 
-  constructor() { }
+  interimTranscript = '';
+  finalTranscript = '';
+
+  constructor(private app: ApplicationRef) { }
 
   ngOnInit() {
     const { webkitSpeechRecognition }: IWindow = window as IWindow;
@@ -29,8 +33,27 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
 
-    // recognition.onstart = function () { ... }
-    // recognition.onresult = function (event) { ... }
+    this.recognition.onstart = () => {
+      console.log('onstart');
+      this.recognizing = true;
+    };
+    this.recognition.onresult = (event: ISpeechEvent) => {
+      console.log('on result', event);
+      this.interimTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          this.finalTranscript += event.results[i][0].transcript;
+          console.log('this.finalTranscript', this.finalTranscript);
+          this.app.tick();
+
+        } else {
+          this.interimTranscript += event.results[i][0].transcript;
+          console.log('this.interimTranscript', this.interimTranscript);
+          this.app.tick();
+        }
+      }
+
+    };
     // recognition.onerror = function (event) { ... }
     // recognition.onend = function () { ... }
   }
@@ -51,7 +74,7 @@ export class SpeechTestComponent implements OnInit {
       return;
     }
     console.log('start');
-    // final_transcript = '';
+    this.finalTranscript = '';
     this.recognition.lang = this.dialect.value;
     this.recognition.start();
     // ignore_onend = false;

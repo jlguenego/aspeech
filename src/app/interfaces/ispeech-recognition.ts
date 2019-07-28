@@ -1,4 +1,7 @@
+import { ISpeechEvent } from './ispeech-event';
+
 export interface ISpeechRecognition {
+
   /**
    * when false, automatically stops after silence.
    *
@@ -13,6 +16,15 @@ export interface ISpeechRecognition {
    * code BCP-47 (language-locale)
    */
   lang: string;
+
+  /**
+   * function that is run by the speech framework when starting to listen speech.
+   */
+  onstart: () => void;
+
+  onresult: (event: ISpeechEvent) => void;
+
+
   /**
    * start listening for speech voice.
    */
@@ -22,5 +34,7 @@ export interface ISpeechRecognition {
    * stop listening for speech voice.
    */
   stop(): void;
+
+
 
 }

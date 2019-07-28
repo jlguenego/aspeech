@@ -6,5 +6,8 @@
 <button class="microphone" (click)="start()">
   <img src="../../assets/mic.svg" alt="Microphone">
 </button>
-<div></div>
+<div class="textarea">
+  <div class="interim">{{interimTranscript}}</div>
+  <div class="final">{{finalTranscript}}</div>
+</div>
 {{dialect.value | json}}
