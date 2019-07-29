@@ -78,6 +78,8 @@ export class SpeechTestComponent implements OnInit {
           console.log('this.finalTranscript', i, this.finalTranscript, alternative.confidence);
         } else {
           const isLast = (i === results.length - 1);
+          console.log('isLast', isLast);
+          console.log('this.interimTranscript', this.interimTranscript);
           this.interimTranscript = this.speech.getInterim(this.interimTranscript, alternative.transcript, isLast);
           console.log('this.interimTranscript', i, this.interimTranscript, '|confidence:', alternative.confidence);
         }
@@ -166,7 +168,7 @@ export class SpeechTestComponent implements OnInit {
     console.log('start');
     this.isStarted = true;
     this.ignoreOnEnd = false;
-    this.finalTranscript = '';
+    // this.finalTranscript = '';
     this.recognition.lang = this.dialect.value;
     this.recognition.start();
   }
