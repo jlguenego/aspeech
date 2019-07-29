@@ -4,7 +4,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SpeechService {
-  getInterim(interimTranscript: string, transcript: string): string {
+
+  command: string;
+
+  getInterim(interimTranscript: string, transcript: string, isLast: boolean): string {
+    // if (transcript === '.') {
+
+    // }
     return interimTranscript + transcript;
   }
 

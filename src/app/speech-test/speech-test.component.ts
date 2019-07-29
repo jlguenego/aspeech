@@ -77,7 +77,8 @@ export class SpeechTestComponent implements OnInit {
           this.finalTranscript = this.speech.getFinal(this.finalTranscript, alternative.transcript);
           console.log('this.finalTranscript', i, this.finalTranscript, alternative.confidence);
         } else {
-          this.interimTranscript = this.speech.getInterim(this.interimTranscript, alternative.transcript);
+          const isLast = (i === results.length - 1);
+          this.interimTranscript = this.speech.getInterim(this.interimTranscript, alternative.transcript, isLast);
           console.log('this.interimTranscript', i, this.interimTranscript, '|confidence:', alternative.confidence);
         }
       }
