@@ -4,49 +4,53 @@
 
 
 <ng-container *ngIf="canWork">
-    <div class="command">
-        <label><input type="checkbox" (change)="toggleInterimResults()" checked><span>Interim Result</span></label>
-        <label><input type="checkbox" (change)="toggleContinuous()" checked><span>Continuous Speech</span></label>
-      </div>
-      <div class="command">
+  <div class="command">
+    <label><input type="checkbox" (change)="toggleInterimResults()" checked><span>Interim Result</span></label>
+    <label><input type="checkbox" (change)="toggleContinuous()" checked><span>Continuous Speech</span></label>
+  </div>
+  <div class="command">
 
-        <select [formControl]="dialect">
-          <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
-        </select>
-        <div class="message" [ngSwitch]="message">
-            <span *ngSwitchCase="MESSAGES.initial">Press the microphone button to record.</span>
-            <span *ngSwitchCase="MESSAGES.listening">Please speak now.</span>
-            <span *ngSwitchCase="MESSAGES.noSpeechError" class="error">No speech was detected. You may need to adjust your
-                <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
-                  microphone settings</a>.</span>
-            <span *ngSwitchCase="MESSAGES.networkError" class="error">You need to be online for speech recognition works.</span>
-            <span *ngSwitchCase="MESSAGES.notAllowedError" class="error">Your settings don't allow microphone to listen.</span>
-            <span *ngSwitchCase="MESSAGES.unknownError" class="error">Unknown error. {{error}}</span>
-        </div>
-        <button class="microphone" (click)="toggleMicrophone()">
-          <div class="listening" *ngIf="!isStarted">
-            <i class="material-icons">mic</i>
-          </div>
-          <div class="listening" *ngIf="isStarted && !isListening">
-            <i class="material-icons">mic_off</i>
-          </div>
+    <select [formControl]="dialect">
+      <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
+    </select>
+    <div class="message" [ngSwitch]="message">
+      <span *ngSwitchCase="MESSAGES.initial">Press the microphone button to record.</span>
+      <span *ngSwitchCase="MESSAGES.listening">Please speak now.</span>
+      <span *ngSwitchCase="MESSAGES.noSpeechError" class="error">No speech was detected. You may need to adjust your
+        <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+          microphone settings</a>.</span>
+      <span *ngSwitchCase="MESSAGES.networkError" class="error">You need to be online for speech recognition
+        works.</span>
+      <span *ngSwitchCase="MESSAGES.notAllowedError" class="error">Your settings don't allow microphone to
+        listen.</span>
+      <span *ngSwitchCase="MESSAGES.abortedError" class="error">There is something that aborted the microphone. May be
+        another website tab already listening?</span>
+      <span *ngSwitchCase="MESSAGES.unknownError" class="error">Unknown error. {{error}}</span>
+    </div>
+    <button class="microphone" (click)="toggleMicrophone()">
+      <div class="listening" *ngIf="!isStarted">
+        <i class="material-icons">mic</i>
+      </div>
+      <div class="listening" *ngIf="isStarted && !isListening">
+        <i class="material-icons">mic_off</i>
+      </div>
 
-          <div *ngIf="isStarted && isListening" class="listening">
-            <i class="material-icons mic_none">mic_none</i>
-            <i class="material-icons mic">mic</i>
-          </div>
+      <div *ngIf="isStarted && isListening" class="listening">
+        <i class="material-icons mic_none">mic_none</i>
+        <i class="material-icons mic">mic</i>
+      </div>
 
-        </button>
-      </div>
-      <div class="confidence" title="Confidence level"><div class="level"
-        [style.width]="confidenceLevel + '%'"
-        [style.background]="(confidenceLevel > 90) ? 'green' : (confidenceLevel > 80) ? 'orange': 'red'"></div></div>
-      <div class="textarea">
-        <div class="interim">{{interimTranscript}}</div>
-        <div class="final">{{finalTranscript}}</div>
-      </div>
-      <div class="note">
-        Note: you can use a "talkie-walkie" mode by pressing the space bar.
-      </div>
+    </button>
+  </div>
+  <div class="confidence" title="Confidence level">
+    <div class="level" [style.width]="confidenceLevel + '%'"
+      [style.background]="(confidenceLevel > 90) ? 'green' : (confidenceLevel > 80) ? 'orange': 'red'"></div>
+  </div>
+  <div class="textarea">
+    <div class="interim">{{interimTranscript}}</div>
+    <div class="final">{{finalTranscript}}</div>
+  </div>
+  <div class="note">
+    Note: you can use a "talkie-walkie" mode by pressing the space bar.
+  </div>
 </ng-container>
-

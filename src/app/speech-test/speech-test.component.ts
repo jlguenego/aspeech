@@ -18,6 +18,7 @@ export class SpeechTestComponent implements OnInit {
     unknownError: 14,
     networkError: 15,
     notAllowedError: 12,
+    abortedError: 16
   };
 
   recognition: SpeechRecognition;
@@ -88,6 +89,7 @@ export class SpeechTestComponent implements OnInit {
         'no-speech': this.MESSAGES.noSpeechError,
         network: this.MESSAGES.networkError,
         'not-allowed': this.MESSAGES.notAllowedError,
+        aborted: this.MESSAGES.abortedError,
       };
       this.message = map[event.error] || this.MESSAGES.unknownError;
       this.ignoreOnEnd = true;
