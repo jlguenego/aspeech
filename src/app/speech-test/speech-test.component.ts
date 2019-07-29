@@ -1,6 +1,7 @@
-import { Component, OnInit, NgZone, ApplicationRef, HostListener } from '@angular/core';
+import { Component, OnInit, ApplicationRef, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IWindow } from '../interfaces/iwindow';
+import { SpeechService } from '../speech.service';
 
 @Component({
   selector: 'app-speech-test',
@@ -43,7 +44,7 @@ export class SpeechTestComponent implements OnInit {
 
   confidenceLevel = 0;
 
-  constructor(private app: ApplicationRef) { }
+  constructor(private app: ApplicationRef, private speech: SpeechService) { }
 
   ngOnInit() {
     if (!('webkitSpeechRecognition' in window)) {
@@ -73,10 +74,10 @@ export class SpeechTestComponent implements OnInit {
         const alternative: SpeechRecognitionAlternative = result[0];
         this.confidenceLevel = alternative.confidence * 100;
         if (result.isFinal) {
-          this.finalTranscript += alternative.transcript;
+          this.finalTranscript = this.speech.getFinal(this.finalTranscript, alternative.transcript);
           console.log('this.finalTranscript', i, this.finalTranscript, alternative.confidence);
         } else {
-          this.interimTranscript += alternative.transcript;
+          this.interimTranscript = this.speech.getInterim(this.interimTranscript, alternative.transcript);
           console.log('this.interimTranscript', i, this.interimTranscript, '|confidence:', alternative.confidence);
         }
       }
