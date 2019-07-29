@@ -40,6 +40,8 @@ export class SpeechTestComponent implements OnInit {
   isListening = false;
   ignoreOnEnd = false;
 
+  confidenceLevel = 0;
+
   constructor(private app: ApplicationRef) { }
 
   ngOnInit() {
@@ -68,12 +70,13 @@ export class SpeechTestComponent implements OnInit {
         const result: SpeechRecognitionResult = results[i];
         // settings with only 1 alternative.
         const alternative: SpeechRecognitionAlternative = result[0];
+        this.confidenceLevel = alternative.confidence * 100;
         if (result.isFinal) {
           this.finalTranscript += alternative.transcript;
-          console.log('this.finalTranscript', i, this.finalTranscript);
+          console.log('this.finalTranscript', i, this.finalTranscript, alternative.confidence);
         } else {
           this.interimTranscript += alternative.transcript;
-          console.log('this.interimTranscript', i, this.interimTranscript);
+          console.log('this.interimTranscript', i, this.interimTranscript, '|confidence:', alternative.confidence);
         }
       }
       this.app.tick();
