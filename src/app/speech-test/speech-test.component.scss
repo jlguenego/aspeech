@@ -21,12 +21,17 @@ button.microphone {
   border-radius: 100%;
   width: 3em;
   height: 3em;
+  overflow: hidden;
+  .material-icons {
+    font-size: 2.5em;
+  }
 
 
   .listening {
     position: relative;
-    top: 0;
-    left: -0.5em;
+    top: -0.2em;
+    left: -0.8em;
+
 
     .mic_off {
       position: relative;
