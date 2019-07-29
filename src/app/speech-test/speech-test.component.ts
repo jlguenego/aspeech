@@ -1,8 +1,6 @@
 import { Component, OnInit, NgZone, ApplicationRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IWindow } from '../interfaces/iwindow';
-import { ISpeechRecognition } from '../interfaces/ispeech-recognition';
-import { ISpeechEvent } from '../interfaces/ispeech-event';
 
 @Component({
   selector: 'app-speech-test',
@@ -20,7 +18,7 @@ export class SpeechTestComponent implements OnInit {
     networkError: 5,
   };
 
-  recognition: ISpeechRecognition;
+  recognition: SpeechRecognition;
 
   countries = [
     { label: 'Français', code: 'fr-FR' },
@@ -46,13 +44,13 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
 
-    this.recognition.onstart = () => {
-      console.log('onstart');
+    this.recognition.onstart = (event: Event) => {
+      console.log('onstart', event);
       this.isListening = true;
       this.message = this.MESSAGES.listening;
       this.app.tick();
     };
-    this.recognition.onresult = (event: ISpeechEvent) => {
+    this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       console.log('on result', event);
       this.interimTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
