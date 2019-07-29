@@ -85,11 +85,15 @@ export class SpeechTestComponent implements OnInit {
     };
     this.recognition.onerror = (event) => {
       console.error('error', event);
+      if (event.error === 'aborted') {
+        alert('Looks like another app is taking the microphone.');
+        this.ignoreOnEnd = true;
+        this.app.tick();
+      }
       const map = {
         'no-speech': this.MESSAGES.noSpeechError,
         network: this.MESSAGES.networkError,
         'not-allowed': this.MESSAGES.notAllowedError,
-        aborted: this.MESSAGES.abortedError,
       };
       this.message = map[event.error] || this.MESSAGES.unknownError;
       this.ignoreOnEnd = true;
@@ -115,6 +119,7 @@ export class SpeechTestComponent implements OnInit {
     if (event.key !== ' ') {
       return;
     }
+    event.stopPropagation();
     if (this.isStarted) {
       return;
     }
