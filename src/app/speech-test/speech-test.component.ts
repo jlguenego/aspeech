@@ -12,11 +12,12 @@ export class SpeechTestComponent implements OnInit {
   canWork = true;
 
   MESSAGES = {
-    initial: 0,
-    listening: 1,
-    noSpeechError: 3,
-    unknownError: 4,
-    networkError: 5,
+    initial: 10,
+    listening: 11,
+    noSpeechError: 13,
+    unknownError: 14,
+    networkError: 15,
+    notAllowedError: 12,
   };
 
   recognition: SpeechRecognition;
@@ -74,16 +75,14 @@ export class SpeechTestComponent implements OnInit {
       this.app.tick();
 
     };
-    this.recognition.onerror = (error) => {
-      console.error('error', error);
-      if (error.error === 'no-speech') {
-        this.message = this.MESSAGES.noSpeechError;
-      } else if (error.error === 'network') {
-        this.message = this.MESSAGES.networkError;
-      } else {
-        this.message = this.MESSAGES.unknownError;
-        this.error = error.error;
-      }
+    this.recognition.onerror = (event) => {
+      console.error('error', event);
+      const map = {
+        'no-speech': this.MESSAGES.noSpeechError,
+        network: this.MESSAGES.networkError,
+        'not-allowed': this.MESSAGES.notAllowedError,
+      };
+      this.message = map[event.error] || this.MESSAGES.unknownError;
       this.ignoreOnEnd = true;
       this.app.tick();
     };
@@ -107,10 +106,10 @@ export class SpeechTestComponent implements OnInit {
     if (event.key !== ' ') {
       return;
     }
-    console.log('space press');
     if (this.isStarted) {
       return;
     }
+    console.log('space press');
     console.log('space press will start');
     this.start();
   }

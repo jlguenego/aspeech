@@ -20,6 +20,7 @@
                 <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
                   microphone settings</a>.</span>
             <span *ngSwitchCase="MESSAGES.networkError" class="error">You need to be online for speech recognition works.</span>
+            <span *ngSwitchCase="MESSAGES.notAllowedError" class="error">Your settings don't allow microphone to listen.</span>
             <span *ngSwitchCase="MESSAGES.unknownError" class="error">Unknown error. {{error}}</span>
         </div>
         <button class="microphone" (click)="toggleMicrophone()">
