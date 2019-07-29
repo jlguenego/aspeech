@@ -9,6 +9,8 @@ import { IWindow } from '../interfaces/iwindow';
 })
 export class SpeechTestComponent implements OnInit {
 
+  canWork = true;
+
   MESSAGES = {
     initial: 0,
     listening: 1,
@@ -24,6 +26,7 @@ export class SpeechTestComponent implements OnInit {
     { label: 'Français', code: 'fr-FR' },
     { label: 'Română', code: 'ro-RO' },
     { label: 'English', code: 'en-NZ' },
+    { label: 'Klingon', code: '' },
   ];
 
   dialect = new FormControl('fr-FR');
@@ -31,6 +34,7 @@ export class SpeechTestComponent implements OnInit {
   interimTranscript = '';
   finalTranscript = '';
   message = this.MESSAGES.initial;
+  error = '';
 
   isStarted = false;
   isListening = false;
@@ -39,10 +43,16 @@ export class SpeechTestComponent implements OnInit {
   constructor(private app: ApplicationRef) { }
 
   ngOnInit() {
+    if (!('webkitSpeechRecognition' in window)) {
+      this.canWork = false;
+      return;
+    }
     const { webkitSpeechRecognition }: IWindow = window as IWindow;
     this.recognition = new webkitSpeechRecognition();
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
+    this.recognition.lang = this.dialect.value;
+    console.log('this.recognition', this.recognition);
 
     this.recognition.onstart = (event: Event) => {
       console.log('onstart', event);
@@ -74,6 +84,7 @@ export class SpeechTestComponent implements OnInit {
         this.message = this.MESSAGES.networkError;
       } else {
         this.message = this.MESSAGES.unknownError;
+        this.error = error.error;
       }
       this.ignoreOnEnd = true;
       this.app.tick();
