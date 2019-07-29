@@ -7,10 +7,29 @@
   <select [formControl]="dialect">
     <option *ngFor="let country of countries" [value]="country.code">{{country.label}}</option>
   </select>
+  <div class="message" [ngSwitch]="message">
+      <span *ngSwitchCase="MESSAGES.initial">Press the microphone button to record.</span>
+      <span *ngSwitchCase="MESSAGES.listening">Please speak now.</span>
+      <span *ngSwitchCase="MESSAGES.listeningOngoing">Press the microphone button to stop.</span>
+      <span *ngSwitchCase="MESSAGES.noSpeechError" class="error">No speech was detected. You may need to adjust your
+          <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+            microphone settings</a>.</span>
+      <span *ngSwitchCase="MESSAGES.networkError" class="error">You need to be online for speech recognition works.</span>
+      <span *ngSwitchCase="MESSAGES.unknownError" class="error">Unknown error.</span>
+  </div>
   <button class="microphone" (click)="toggleMicrophone()">
-    <i class="material-icons" *ngIf="!isStarted">mic</i>
-    <i class="material-icons" *ngIf="isStarted && !isListening">mic_off</i>
-    <i class="material-icons" *ngIf="isStarted && isListening">mic_none</i>
+    <div class="listening" *ngIf="!isStarted">
+      <i class="material-icons">mic</i>
+    </div>
+    <div class="listening" *ngIf="isStarted && !isListening">
+      <i class="material-icons">mic_off</i>
+    </div>
+
+    <div *ngIf="isStarted && isListening" class="listening">
+      <i class="material-icons mic_none">mic_none</i>
+      <i class="material-icons mic">mic</i>
+    </div>
+
   </button>
 </div>
 <div class="textarea">

@@ -11,6 +11,15 @@ import { ISpeechEvent } from '../interfaces/ispeech-event';
 })
 export class SpeechTestComponent implements OnInit {
 
+  MESSAGES = {
+    initial: 0,
+    listening: 1,
+    listeningOngoing: 2,
+    noSpeechError: 3,
+    unknownError: 4,
+    networkError: 5,
+  };
+
   recognition: ISpeechRecognition;
 
   countries = [
@@ -23,6 +32,7 @@ export class SpeechTestComponent implements OnInit {
 
   interimTranscript = '';
   finalTranscript = '';
+  message = this.MESSAGES.initial;
 
   isStarted = false;
   isListening = false;
@@ -39,6 +49,7 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.onstart = () => {
       console.log('onstart');
       this.isListening = true;
+      this.message = this.MESSAGES.listening;
       this.app.tick();
     };
     this.recognition.onresult = (event: ISpeechEvent) => {
@@ -48,29 +59,38 @@ export class SpeechTestComponent implements OnInit {
         if (event.results[i].isFinal) {
           this.finalTranscript += event.results[i][0].transcript;
           console.log('this.finalTranscript', this.finalTranscript);
-          this.app.tick();
-
         } else {
           this.interimTranscript += event.results[i][0].transcript;
           console.log('this.interimTranscript', this.interimTranscript);
-          this.app.tick();
         }
       }
+      this.message = this.MESSAGES.listeningOngoing;
+      this.app.tick();
 
     };
-    this.recognition.onerror = (event) => {
-      console.error('error', event);
+    this.recognition.onerror = (error) => {
+      console.error('error', error);
+      if (error.error === 'no-speech') {
+        this.message = this.MESSAGES.noSpeechError;
+      } else if (error.error === 'network') {
+        this.message = this.MESSAGES.networkError;
+      } else {
+        this.message = this.MESSAGES.unknownError;
+      }
+      this.ignoreOnEnd = true;
       this.app.tick();
     };
 
     this.recognition.onend = () => {
       console.log('onend');
       this.isListening = false;
-      if (this.ignoreOnEnd) {
-        return;
-      }
       this.isStarted = false;
       this.isListening = false;
+      if (this.ignoreOnEnd) {
+        this.app.tick();
+        return;
+      }
+      this.message = this.MESSAGES.initial;
       this.app.tick();
     };
   }
@@ -90,6 +110,7 @@ export class SpeechTestComponent implements OnInit {
       this.isStarted = false;
       return;
     }
+
     console.log('start');
     this.isStarted = true;
     this.ignoreOnEnd = false;

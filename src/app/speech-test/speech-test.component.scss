@@ -1,5 +1,3 @@
-
-
 .command {
   display: flex;
   align-items: center;
@@ -19,8 +17,39 @@
   color: black;
 }
 
-.microphone>.material-icons {
-  margin: -0.15em;
+button.microphone {
+  border-radius: 100%;
+  width: 3em;
+  height: 3em;
+
+
+  .listening {
+    position: relative;
+    top: 0;
+    left: -0.5em;
+
+    .mic_off {
+      position: relative;
+    }
+
+    .mic {
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: listening 1s infinite;
+    }
+
+  }
+}
+
+@keyframes listening {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.5;
+  }
 }
 
 .textarea {
@@ -28,4 +57,13 @@
   border: 0.1em solid #eee;
   width: 100%;
   min-height: 4em;
+}
+
+.message {
+  flex-grow: 1;
+  font-size: 0.8em;
+  padding-left: 1em;
+  .error {
+    color: red;
+  }
 }
