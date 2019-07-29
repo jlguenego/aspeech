@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ApplicationRef } from '@angular/core';
+import { Component, OnInit, NgZone, ApplicationRef, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IWindow } from '../interfaces/iwindow';
 
@@ -14,7 +14,6 @@ export class SpeechTestComponent implements OnInit {
   MESSAGES = {
     initial: 0,
     listening: 1,
-    listeningOngoing: 2,
     noSpeechError: 3,
     unknownError: 4,
     networkError: 5,
@@ -72,7 +71,6 @@ export class SpeechTestComponent implements OnInit {
           console.log('this.interimTranscript', this.interimTranscript);
         }
       }
-      this.message = this.MESSAGES.listeningOngoing;
       this.app.tick();
 
     };
@@ -104,6 +102,29 @@ export class SpeechTestComponent implements OnInit {
     };
   }
 
+  @HostListener('document:keypress', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (event.key !== ' ') {
+      return;
+    }
+    console.log('space press');
+    if (this.isStarted) {
+      return;
+    }
+    console.log('space press will start');
+    this.start();
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyup(event: KeyboardEvent) {
+    if (event.key !== ' ') {
+      return;
+    }
+    console.log('space up');
+    this.stop();
+    console.log('end space up');
+  }
+
   toggleContinuous() {
     this.recognition.continuous = !this.recognition.continuous;
   }
@@ -114,12 +135,19 @@ export class SpeechTestComponent implements OnInit {
 
   toggleMicrophone() {
     if (this.isStarted) {
-      this.recognition.stop();
-      console.log('stop');
-      this.isStarted = false;
+      this.stop();
       return;
     }
+    console.log('toggle will start');
+    this.start();
+  }
 
+  stop() {
+    this.recognition.stop();
+    console.log('order stop sent');
+  }
+
+  start() {
     console.log('start');
     this.isStarted = true;
     this.ignoreOnEnd = false;

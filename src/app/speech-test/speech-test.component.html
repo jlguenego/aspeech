@@ -16,7 +16,6 @@
         <div class="message" [ngSwitch]="message">
             <span *ngSwitchCase="MESSAGES.initial">Press the microphone button to record.</span>
             <span *ngSwitchCase="MESSAGES.listening">Please speak now.</span>
-            <span *ngSwitchCase="MESSAGES.listeningOngoing">Press the microphone button to stop.</span>
             <span *ngSwitchCase="MESSAGES.noSpeechError" class="error">No speech was detected. You may need to adjust your
                 <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
                   microphone settings</a>.</span>
@@ -41,6 +40,9 @@
       <div class="textarea">
         <div class="interim">{{interimTranscript}}</div>
         <div class="final">{{finalTranscript}}</div>
+      </div>
+      <div class="note">
+        Note: you can use a "talkie-walkie" mode by pressing the space bar.
       </div>
 </ng-container>
 
