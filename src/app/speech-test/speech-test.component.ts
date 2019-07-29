@@ -63,13 +63,17 @@ export class SpeechTestComponent implements OnInit {
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       console.log('on result', event);
       this.interimTranscript = '';
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          this.finalTranscript += event.results[i][0].transcript;
-          console.log('this.finalTranscript', this.finalTranscript);
+      const results: SpeechRecognitionResultList = event.results;
+      for (let i = event.resultIndex; i < results.length; ++i) {
+        const result: SpeechRecognitionResult = results[i];
+        // settings with only 1 alternative.
+        const alternative: SpeechRecognitionAlternative = result[0];
+        if (result.isFinal) {
+          this.finalTranscript += alternative.transcript;
+          console.log('this.finalTranscript', i, this.finalTranscript);
         } else {
-          this.interimTranscript += event.results[i][0].transcript;
-          console.log('this.interimTranscript', this.interimTranscript);
+          this.interimTranscript += alternative.transcript;
+          console.log('this.interimTranscript', i, this.interimTranscript);
         }
       }
       this.app.tick();
