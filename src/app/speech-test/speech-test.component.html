@@ -47,8 +47,8 @@
       [style.background]="(confidenceLevel > 90) ? 'green' : (confidenceLevel > 80) ? 'orange': 'red'"></div>
   </div>
   <div class="textarea">
-    <div class="interim">{{interimTranscript}}</div>
     <div class="final" [innerHTML]="finalTranscript"></div>
+    <div class="interim">{{interimTranscript}}</div>
   </div>
   <div class="note">
     Note: you can use a "talkie-walkie" mode by pressing the space bar.

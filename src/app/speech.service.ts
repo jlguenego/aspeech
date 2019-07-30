@@ -1,44 +1,5 @@
 import { Injectable } from '@angular/core';
-
-interface Command {
-  interim?: { [lang: string]: string };
-  final?: { [lang: string]: string };
-  fn: (service: SpeechService) => string;
-}
-
-const commands: { [key: string]: Command; } = {
-  REMOVE_ALL: {
-    interim: {
-      fr: 'efface tout',
-      en: 'remove all'
-    },
-    fn: () => ''
-  },
-  REMOVE: {
-    interim: {
-      fr: 'efface',
-      en: 'remove'
-    },
-    fn: (service: SpeechService) => service.finalTranscript.replace(/^(.*)\s+\S+\s*$/, '$1')
-  },
-  NEWLINE: {
-    final: {
-      fr: '\n',
-      en: '\n'
-    },
-    fn: (service: SpeechService) => service.finalTranscript + '<br>'
-  },
-  STOP: {
-    final: {
-      fr: 'stop',
-      en: 'stop'
-    },
-    fn: (service: SpeechService) => {
-      service.speechRecognition.stop();
-      return service.finalTranscript;
-    }
-  },
-};
+import { Command, commands } from './command';
 
 const trimSpace = (str: string): string => {
   let result = str;
@@ -116,12 +77,25 @@ export class SpeechService {
       if (!commands[p].final) {
         continue;
       }
-      console.log(`final trimSpace(transcript)=|${trimSpace(transcript)}|`);
-      console.log(`final commands[p].final=|${commands[p].final[this.lang.substring(0, 2)]}|`);
-      if (trimSpace(transcript) === commands[p].final[this.lang.substring(0, 2)]) {
-        console.log('setting command', commands[p]);
-        this.command = commands[p];
-        return;
+      const pattern = commands[p].final[this.lang.substring(0, 2)];
+      if (typeof pattern === 'string') {
+        console.log(`final trimSpace(transcript)=|${trimSpace(transcript)}|`);
+        console.log(`final commands[p].final=|${pattern}|`);
+        if (trimSpace(transcript) === pattern) {
+          console.log('setting command', commands[p]);
+          this.command = commands[p];
+          return;
+        }
+      }
+      if (pattern instanceof RegExp) {
+        console.log('regexp !!!');
+        console.log(`final trimSpace(transcript)=|${trimSpace(transcript)}|`);
+        console.log(`pattern=${pattern}`);
+        if (trimSpace(transcript).match(pattern)) {
+          console.log('setting command', commands[p]);
+          this.command = commands[p];
+          return;
+        }
       }
     }
     this.command = undefined;
