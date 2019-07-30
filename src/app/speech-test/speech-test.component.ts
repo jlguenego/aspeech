@@ -55,6 +55,7 @@ export class SpeechTestComponent implements OnInit {
     this.recognition = new webkitSpeechRecognition();
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
+    this.speech.speechRecognition = this.recognition;
     this.setLang();
     console.log('this.recognition', this.recognition);
 

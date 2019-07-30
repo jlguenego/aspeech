@@ -28,6 +28,16 @@ const commands: { [key: string]: Command; } = {
     },
     fn: (service: SpeechService) => service.finalTranscript + '<br>'
   },
+  STOP: {
+    final: {
+      fr: 'stop',
+      en: 'stop'
+    },
+    fn: (service: SpeechService) => {
+      service.speechRecognition.stop();
+      return service.finalTranscript;
+    }
+  },
 };
 
 const trimSpace = (str: string): string => {
@@ -41,15 +51,6 @@ const trimSpace = (str: string): string => {
   return result;
 };
 
-function str2ab(str) {
-  const buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
-  const bufView = new Uint16Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -59,6 +60,7 @@ export class SpeechService {
   finalTranscript: string;
   transcript: string;
   lang = 'fr_FR';
+  speechRecognition: SpeechRecognition;
 
   getInterim(interimTranscript: string, transcript: string, isLast: boolean): string {
     console.log('isLast', isLast);
@@ -116,7 +118,6 @@ export class SpeechService {
       }
       console.log(`final trimSpace(transcript)=|${trimSpace(transcript)}|`);
       console.log(`final commands[p].final=|${commands[p].final[this.lang.substring(0, 2)]}|`);
-      console.log('hexa trimSpace(transcript)', str2ab(trimSpace(transcript)));
       if (trimSpace(transcript) === commands[p].final[this.lang.substring(0, 2)]) {
         console.log('setting command', commands[p]);
         this.command = commands[p];
