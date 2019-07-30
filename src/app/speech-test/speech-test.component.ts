@@ -55,7 +55,7 @@ export class SpeechTestComponent implements OnInit {
     this.recognition = new webkitSpeechRecognition();
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
-    this.recognition.lang = this.dialect.value;
+    this.setLang();
     console.log('this.recognition', this.recognition);
 
     this.recognition.onstart = (event: Event) => {
@@ -169,8 +169,13 @@ export class SpeechTestComponent implements OnInit {
     this.isStarted = true;
     this.ignoreOnEnd = false;
     // this.finalTranscript = '';
-    this.recognition.lang = this.dialect.value;
+    this.setLang();
     this.recognition.start();
+  }
+
+  setLang() {
+    this.recognition.lang = this.dialect.value;
+    this.speech.lang = this.dialect.value;
   }
 
 }
